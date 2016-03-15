@@ -15,3 +15,67 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 img {
   max-width: 100%;
 }
+
+body {
+  background-color: #e0e1e2;
+}
+
+.chat-app {
+  background-color: #fff;
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 80%;
+  margin-bottom: 10px;
+  padding: 15px;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.message-text {
+  font-size: 16px;
+  padding: 0;
+  // vertical-align: middle;
+}
+
+.timestamp {
+  font-size: 12px;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  text-align: right;
+}
+
+.left-side-chat {
+  width: 45%;
+  margin-right: 10%;
+  border-radius: 4px;
+  background-color: #17aa56;
+  border: none;
+  color: #fff;
+  padding: 10px;
+}
+
+.right-side-chat {
+  width: 45%;
+  margin-left: 55%;
+  border-radius: 4px;
+  background-color: #17aa56;
+  border: none;
+  color: #fff;
+  padding: 10px;
+}
+
+#response-form {
+  width: 100%;
+
+}
+
+#message-text-input {
+  margin-top: 15px;
+  width: 100%;
+  display: inline-block;
+}
+
+#send-message-button {
+  display: inline-block;
+  float: right;
+}
