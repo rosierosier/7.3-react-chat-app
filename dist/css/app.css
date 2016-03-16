@@ -5820,7 +5820,45 @@ img {
 body {
   background-color: #e0e1e2; }
 
-.chat-app {
+.header {
+  background-color: #17aa56;
+  border-top-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 80%; }
+
+.header h1 {
+  text-align: center;
+  color: #fff;
+  margin-top: 0;
+  padding: 10px; }
+
+.log-in-div {
+  text-align: center; }
+
+#username {
+  width: 80%;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  border-radius: 3px;
+  padding: 5px; }
+
+#password {
+  width: 80%;
+  margin-bottom: 15px;
+  border-radius: 3px;
+  padding: 5px; }
+
+#login {
+  width: 40%;
+  border: none;
+  border-radius: 3px;
+  padding: 10px;
+  background-color: #17aa56;
+  color: #fff; }
+
+.chat-app, .log-in-page {
   background-color: #fff;
   margin-left: 10%;
   margin-right: 10%;
@@ -5832,7 +5870,12 @@ body {
 
 .message-text {
   font-size: 16px;
-  padding: 0; }
+  padding: 0;
+  display: inline;
+  word-wrap: break-word;
+  text-align: left;
+  overflow-x: auto;
+  overflow-y: auto; }
 
 .timestamp {
   font-size: 12px;
@@ -5842,6 +5885,7 @@ body {
 
 .left-side-chat {
   width: 45%;
+  min-height: 50px;
   margin-right: 10%;
   border-radius: 4px;
   background-color: #17aa56;
@@ -5851,6 +5895,7 @@ body {
 
 .right-side-chat {
   width: 45%;
+  min-height: 50px;
   margin-left: 55%;
   border-radius: 4px;
   background-color: #17aa56;
