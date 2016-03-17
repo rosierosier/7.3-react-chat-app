@@ -4,8 +4,12 @@ var ReactDOM = require('react-dom');
 require('backbone-react-component');
 var $ = require('jquery');
 
+var LinkedStateMixin = require('react-addons-linked-state-mixin');
+
 var models = require('../models/message');
-var newMessageCollection = new models.MessageCollection();
+var user = require('../models/user');
+var Users = new user.UserCollection();
+
 
 console.log('Hello Index Component');
 
@@ -21,17 +25,38 @@ var ChatApp = React.createClass({
     return (
       <div>
         <LogInView />
-        <MessageView />
+        <MessageView collection={this.props.collection}/>
       </div>
     );
   }
 });
 
-var LogInView = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
 
-  displayMessages: function(e){
-    console.log('displaying messages');
+var LogInView = React.createClass({
+  mixins: [LinkedStateMixin],
+  getInitialState: function(){
+    return {username: '', password: ''}
+  },
+
+  // displayMessages: function(e){
+  //   e.preventDefault();
+    // console.log('displaying messages');
+    // $('.chat-app').toggle('medium', function(){
+    //   $('.chat-app').removeClass('invisible');
+    // });
+  // },
+
+  // handleUserChange: function(e){
+  //   this.setState({username: e.target.value});
+  // },
+
+  login: function(e){
+    e.preventDefault();
+    var users = this.props.collection;
+    var user = new Users();
+    users.create({'username': this.state.username, 'password': this.state.password});
+  },
+  changeView: function(e){
     e.preventDefault();
     $('.chat-app').toggle('medium', function(){
       $('.chat-app').removeClass('invisible');
@@ -39,66 +64,63 @@ var LogInView = React.createClass({
   },
 
   render: function(){
-    <div className="log-in-page">
-      <div className="log-in-div">
-        <form id="login-form" onSubmit={this.displayMessages}>
-          <input type="text" name="username" placeholder="Username" id="username" className="" /><br/>
-          <input type="password" name="password" placeholder="Password" id="password" className="" /><br/>
-          <input type="submit" id="login" value="Log In"/>
+    return (
+      <div className="log-in-page">
+        <div className="log-in-div">
+          <form id="login-form" onSubmit={this.displayMessages}>
+            <input type="text" valueLink={this.linkState('username')} name="username" placeholder="Username" id="username" className="" /><br/>
+            <input type="password" valueLink={this.linkState('password')} name="password" placeholder="Password" id="password" className="" /><br/>
+            <input type="submit" onClick={this.login} id="login" value="Log In"/>
+          </form>
+        </div>
+      </div>
+    );
+  }
+});
+
+ReactDOM.render(<LogInView collection={Users}/>, document.getElementById('chat'));
+
+var MessageItem = React.createClass({
+  render: function(){
+    return (
+      <div className="chat-app invisible">
+        <div className="left-side-chat">
+          <p className="message-text">{this.props.model.get('message')}</p>
+          <p className="timestamp">{this.props.model.get('time')}</p>
+        </div>
+        <div className="right-side-chat">
+          <p className="message-text">{this.props.model.get('message')}</p>
+          <p className="timestamp">{this.props.model.get('time')}</p>
+        </div>
+        <form id="response-form">
+          <input type="text" name="reply" placeholder="Reply . . ." id="message-text-input" className="" />
+          <input type="submit" id="send-message-button" value="Send"/>
         </form>
       </div>
-    </div>
+    );
   }
 });
 
 var MessageView = React.createClass({
-  getInitialState: function(){
-    return {
-      messages: []
-    };
-  },
+  // getInitialState: function(){
+  //   return {
+  //     messages: []
+  //   };
+  // },
 
   render: function(){
-    var messageList = this.props.collection.map(function(model){
+    var messageItem = this.props.collection.map(function(model){
+      var className = models.get('username') == this.props.currentUser ? 'right-side-chat': 'left-side-chat';
       return (
-        <Message model={model} key={model.id} />
-        );
-      });
-      return (
-        <div className="chat-app invisible">
-          <div className="left-side-chat">
-            <p className="message-text">{this.props.model.get('message')}</p>
-            <p className="timestamp">{this.props.model.get('time')}</p>
-          </div>
-          <div className="right-side-chat">
-            <p className="message-text">{this.props.model.get('message')}</p>
-            <p className="timestamp">{this.props.model.get('time')}</p>
-          </div>
-          <form id="response-form">
-            <input type="text" name="reply" placeholder="Reply . . ." id="message-text-input" className="" />
-            <input type="submit" id="send-message-button" value="Send"/>
-          </form>
+        <div key={model.id}>
+          <MessageItem model={model} className={className}/>
         </div>
       );
+    });
+      return <div>{messageItem}</div>
     }
 });
 
-// var MessageListing = React.createClass({
-//     return (
-//       <div className="wrapper">
-//         <div id="header" onClick={this.displayForm}>
-//           <button><p>+</p></button>
-//         </div>
-//         <div id="log-in-page" className="invisible">
-//           <FormComponent collection={this.props.collection}/>
-//         </div>
-//         <div className="image-wrapper">
-//           {imageList}
-//         </div>
-//       </div>
-//     )
-//   }
-// });
 
 module.exports = {
   'ChatApp': ChatApp,
