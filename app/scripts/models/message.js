@@ -3,6 +3,8 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 require('backbone-react-component');
 
+console.log('Hello Message Model');
+
 var Message = Backbone.Model.extend({
 
 });
