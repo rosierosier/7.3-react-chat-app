@@ -4,7 +4,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 require('backbone-react-component');
 
-var Message = require('./components/index.jsx');
+var ChatApp = require('./components/index.jsx');
 var MessageListing = require('./components/listing.jsx');
 var models = require('./models/message');
 var userModels = require('./models/user');
@@ -14,10 +14,10 @@ var MessageView = Message.MessageView;
 
 
 ReactDOM.render(
-  <Message collection={newMessageCollection}/>,
+  <ChatApp collection={newMessageCollection}/>,
   <MessageView collection={newMessageCollection}/>,
-  // <LogInView collection={newUserCollection}/>,
-  document.getElementById('chat-app')
+  <LogInView collection={newUserCollection}/>,
+  document.getElementById('chat')
 );
 
 newMessageCollection.fetch();

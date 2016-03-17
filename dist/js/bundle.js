@@ -7,11 +7,11 @@ require('backbone-react-component');
 var $ = require('jquery');
 
 var models = require('../models/message');
-// var FormComponent = require('./form.jsx');
+var newMessageCollection = new models.MessageCollection();
 
-console.log('Hello Listing');
+console.log('Hello Index Component');
 
-var Message = React.createClass({displayName: "Message",
+var ChatApp = React.createClass({displayName: "ChatApp",
   mixins: [Backbone.React.Component.mixin],
   getInitialState: function(){
     return {
@@ -19,57 +19,37 @@ var Message = React.createClass({displayName: "Message",
     };
   },
 
-  _onName: function(e){
-    if (e.nativeEvent.keyCode != 13) return;
-    var username = e.target.value;
-    this.setState({username: username});
-  },
-
   render: function(){
     return (
       React.createElement("div", null, 
-        React.createElement(LogInView, {username: this.state.username, _onName: this._onName}), 
-      React.createElement(MessageView, {username: this.state.username})
+        React.createElement(LogInView, null), 
+        React.createElement(MessageView, null)
       )
     );
   }
-
-      // <div class="log-in-page">
-      //   <div class="log-in-div">
-      //     <form id="login-form">
-      //       <input type="text" name="username" placeholder="Username" id="username" className="" /><br/>
-      //       <input type="password" name="password" placeholder="Password" id="password" className="" /><br/>
-      //       <input type="submit" id="login" value="Log In"/>
-      //     </form>
-      //   </div>
-      // </div>
-
-
-  //     <div className="image-caption-div">
-  //       <div className="image-div">
-  //         <p className="message-text"{this.props.model.get('message')}></p>
-  //         <p className="timestamp">{this.props.model.get('time')}</p>
-  //       </div>
-  //       <div className="caption-div">
-  //         <p>
-  //           {this.props.model.get('caption')}
-  //         </p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
 });
 
 var LogInView = React.createClass({displayName: "LogInView",
+  mixins: [Backbone.React.Component.mixin],
+
+  displayMessages: function(e){
+    console.log('displaying messages');
+    e.preventDefault();
+    $('.chat-app').toggle('medium', function(){
+      $('.chat-app').removeClass('invisible');
+    });
+  },
+
   render: function(){
-    var view;
-    var username = this.props.username;
-    if (username) {
-      view = React.createElement("h1", null, "Welcome ", username)
-    } else {
-      view = React.createElement("input", {onKeyPress: this.props._onName, placeholder: "Please enter your username to get started with chatapp!"})
-    }
-    return view;
+    React.createElement("div", {className: "log-in-page"}, 
+      React.createElement("div", {className: "log-in-div"}, 
+        React.createElement("form", {id: "login-form", onSubmit: this.displayMessages}, 
+          React.createElement("input", {type: "text", name: "username", placeholder: "Username", id: "username", className: ""}), React.createElement("br", null), 
+          React.createElement("input", {type: "password", name: "password", placeholder: "Password", id: "password", className: ""}), React.createElement("br", null), 
+          React.createElement("input", {type: "submit", id: "login", value: "Log In"})
+        )
+      )
+    )
   }
 });
 
@@ -81,39 +61,37 @@ var MessageView = React.createClass({displayName: "MessageView",
   },
 
   render: function(){
-    if (!this.props.username) var style={display: none}
-    return (
-      React.createElement("div", {style: style}, 
-        React.createElement("input", {placeholder: "Type a message", onKeyPress: this._onMessage})
-      )
-    );
-  }
+    var messageList = this.props.collection.map(function(model){
+      return (
+        React.createElement(Message, {model: model, key: model.id})
+        );
+      });
+      return (
+        React.createElement("div", {className: "chat-app invisible"}, 
+          React.createElement("div", {className: "left-side-chat"}, 
+            React.createElement("p", {className: "message-text"}, this.props.model.get('message')), 
+            React.createElement("p", {className: "timestamp"}, this.props.model.get('time'))
+          ), 
+          React.createElement("div", {className: "right-side-chat"}, 
+            React.createElement("p", {className: "message-text"}, this.props.model.get('message')), 
+            React.createElement("p", {className: "timestamp"}, this.props.model.get('time'))
+          ), 
+          React.createElement("form", {id: "response-form"}, 
+            React.createElement("input", {type: "text", name: "reply", placeholder: "Reply . . .", id: "message-text-input", className: ""}), 
+            React.createElement("input", {type: "submit", id: "send-message-button", value: "Send"})
+          )
+        )
+      );
+    }
 });
 
 // var MessageListing = React.createClass({
-//   mixins: [Backbone.React.Component.mixin],
-//
-//   displayForm: function(e){
-//     console.log('displaying form');
-//     e.preventDefault();
-//     // $('#form').toggle('medium', function(){
-//     //   $('#form').removeClass('invisible');
-//     // });
-//   },
-//
-//   render: function(){
-//     var messageList = this.props.collection.map(function(model){
-//       return (
-//         <Message model={model} key={model.id} />
-//         );
-//     });
-//
 //     return (
 //       <div className="wrapper">
 //         <div id="header" onClick={this.displayForm}>
 //           <button><p>+</p></button>
 //         </div>
-//         <div id="form" className="invisible">
+//         <div id="log-in-page" className="invisible">
 //           <FormComponent collection={this.props.collection}/>
 //         </div>
 //         <div className="image-wrapper">
@@ -125,7 +103,7 @@ var MessageView = React.createClass({displayName: "MessageView",
 // });
 
 module.exports = {
-  'Message': Message,
+  'ChatApp': ChatApp,
   'MessageView': MessageView,
   'LogInView': LogInView
 };
@@ -141,7 +119,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 require('backbone-react-component');
 
-var Message = require('./components/index.jsx');
+var ChatApp = require('./components/index.jsx');
 var MessageListing = require('./components/listing.jsx');
 var models = require('./models/message');
 var userModels = require('./models/user');
@@ -151,10 +129,10 @@ var MessageView = Message.MessageView;
 
 
 ReactDOM.render(
-  React.createElement(Message, {collection: newMessageCollection}),
+  React.createElement(ChatApp, {collection: newMessageCollection}),
   React.createElement(MessageView, {collection: newMessageCollection}),
-  // <LogInView collection={newUserCollection}/>,
-  document.getElementById('chat-app')
+  React.createElement(LogInView, {collection: newUserCollection}),
+  document.getElementById('chat')
 );
 
 newMessageCollection.fetch();

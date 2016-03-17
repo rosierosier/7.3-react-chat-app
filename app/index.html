@@ -11,29 +11,32 @@
       <h1>chatapp</h1>
     </div>
 
-    <div class="log-in-page">
-      <div class="log-in-div">
-        <form id="login-form">
-          <input type="text" name="username" placeholder="Username" id="username" className="" /><br/>
-          <input type="password" name="password" placeholder="Password" id="password" className="" /><br/>
-          <input type="submit" id="login" value="Log In"/>
-        </form>
-      </div>
-    </div>
+    <div id="chat">
+      <!-- <div class="log-in-page">
+        <div class="log-in-div">
+          <form id="login-form">
+            <input type="text" name="username" placeholder="Username" id="username" className="" /><br/>
+            <input type="password" name="password" placeholder="Password" id="password" className="" /><br/>
+            <input type="submit" id="login" value="Log In"/>
+          </form>
+        </div>
+      </div> -->
 
-    <div class="chat-app">
-      <div class="left-side-chat">
-        <p class="message-text">{this.props.model.get('message')}</p>
-        <p class="timestamp">{this.props.model.get('time')}</p>
-      </div>
-      <div class="right-side-chat">
-        <p class="message-text">{this.props.model.get('message')}</p>
-        <p class="timestamp">{this.props.model.get('time')</p>
-      </div>
-      <form id="response-form">
-        <input type="text" name="reply" placeholder="Reply . . ." id="message-text-input" className="" />
-        <input type="submit" id="send-message-button" value="Send"/>
-      </form>
+      <!-- <div class="chat-app">
+        <div class="left-side-chat">
+          <p class="message-text">{this.props.model.get('message')}</p>
+          <p class="timestamp">{this.props.model.get('time')}</p>
+        </div>
+        <div class="right-side-chat">
+          <p class="message-text">{this.props.model.get('message')}</p>
+          <p class="timestamp">{this.props.model.get('time')</p>
+        </div>
+        <form id="response-form">
+          <input type="text" name="reply" placeholder="Reply . . ." id="message-text-input" className="" />
+          <input type="submit" id="send-message-button" value="Send"/>
+        </form>
+      </div> -->
+
     </div>
 
     <script src="js/bundle.js"></script>
